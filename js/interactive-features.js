@@ -1,4 +1,4 @@
-// interactive-features.js -- $10k Luxury Level interactive enhancements for Vansh & Ishika invite
+// interactive-features.js -- $10k Luxury Level interactive enhancements for Gaurav & Tanishka invite
 
 document.addEventListener("DOMContentLoaded", () => {
   initDock();
@@ -92,7 +92,7 @@ function initDiyaPond() {
   const btnCta = document.getElementById("btnLightDiya");
   if (!pond || !countBadge) return;
 
-  let count = parseInt(localStorage.getItem("vi_diya_count") || "618", 10);
+  let count = parseInt(localStorage.getItem("gt_diya_count") || "618", 10);
   countBadge.textContent = count.toLocaleString();
 
   function spawnDiya(x, y, playSound = true) {
@@ -110,7 +110,7 @@ function initDiyaPond() {
     pond.appendChild(diya);
 
     count++;
-    localStorage.setItem("vi_diya_count", count.toString());
+    localStorage.setItem("gt_diya_count", count.toString());
     countBadge.textContent = count.toLocaleString();
 
     if (playSound) {
@@ -166,13 +166,13 @@ function initWishes() {
 
   const defaultWishes = [
     { text: "May your sacred union be blessed with love that grows deeper with every sunrise.", author: "Loved Ones" },
-    { text: "Wishing Vansh & Ishika an eternity of laughter, health, and royal togetherness!", author: "Khandelwal Elders" },
+    { text: "Wishing Gaurav & Tanishka an eternity of laughter, health, and royal togetherness!", author: "Khandelwal Elders" },
     { text: "Sada Sukhi Raho! Can't wait to dance at the Sangeet & Haldi celebrations in Agra!", author: "Friends & Family" }
   ];
 
   let savedWishes = [];
   try {
-    savedWishes = JSON.parse(localStorage.getItem("vi_guest_wishes") || "[]");
+    savedWishes = JSON.parse(localStorage.getItem("gt_guest_wishes") || "[]");
   } catch (e) {}
 
   const allWishes = [...defaultWishes, ...savedWishes];
@@ -199,7 +199,7 @@ function initWishes() {
     allWishes.push(newWish);
     savedWishes.push(newWish);
     try {
-      localStorage.setItem("vi_guest_wishes", JSON.stringify(savedWishes));
+      localStorage.setItem("gt_guest_wishes", JSON.stringify(savedWishes));
     } catch (e) {}
     renderWishes();
     playTempleChime();
@@ -228,8 +228,8 @@ function initCalendar() {
   const btnGoogle = document.getElementById("btnCalGoogle");
   const btnIcal = document.getElementById("btnCalIcal");
 
-  const title = encodeURIComponent("Vansh & Ishika Wedding Celebrations");
-  const desc = encodeURIComponent("Join us to celebrate the royal wedding ceremonies of Vansh & Ishika in Agra.\n\nEvents:\n- Mehendi & Tilak: 20th November (DoubleTree by Hilton)\n- Haldi Carnival & Wedding Ceremony: 21st November (Raj Devam)");
+  const title = encodeURIComponent("Gaurav & Tanishka Wedding Celebrations");
+  const desc = encodeURIComponent("Join us to celebrate the royal wedding ceremonies of Gaurav & Tanishka in Agra.\n\nEvents:\n- Mehendi & Tilak: 20th November (DoubleTree by Hilton)\n- Haldi Carnival & Wedding Ceremony: 21st November (Raj Devam)");
   const loc = encodeURIComponent("Agra, Uttar Pradesh, India");
   const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=20261120T043000Z/20261121T183000Z&details=${desc}&location=${loc}`;
 
@@ -243,11 +243,11 @@ function initCalendar() {
       const icsData = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        "PRODID:-//Vansh & Ishika Wedding//EN",
+        "PRODID:-//Gaurav & Tanishka Wedding//EN",
         "CALSCALE:GREGORIAN",
         "BEGIN:VEVENT",
-        "SUMMARY:Vansh & Ishika Wedding Celebrations",
-        "DESCRIPTION:Celebrating the auspicious wedding of Vansh & Ishika in Agra.",
+        "SUMMARY:Gaurav & Tanishka Wedding Celebrations",
+        "DESCRIPTION:Celebrating the auspicious wedding of Gaurav & Tanishka in Agra.",
         "LOCATION:Agra, Uttar Pradesh, India",
         "DTSTART:20261120T100000",
         "DTEND:20261121T235900",
@@ -260,7 +260,7 @@ function initCalendar() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "vansh-ishika-wedding.ics";
+      a.download = "gaurav-tanishka-wedding.ics";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
