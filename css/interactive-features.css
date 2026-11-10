@@ -1,0 +1,546 @@
+/* interactive-features.css -- Innovative interactive royal elements for Vansh & Ishika invite */
+
+/* -------------------------------------------------- Floating Royal Quick Dock */
+.royal-dock {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(31, 15, 18, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(223, 178, 96, 0.45);
+  border-radius: 999px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(223, 178, 96, 0.2);
+  z-index: 90;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  opacity: 0;
+  pointer-events: none;
+  max-width: calc(100vw - 32px);
+}
+
+.royal-dock.is-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.royal-dock__btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #f7e6c4;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.royal-dock__btn:hover, .royal-dock__btn:active {
+  background: rgba(223, 178, 96, 0.2);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.royal-dock__btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #dfb260;
+  flex-shrink: 0;
+}
+
+.royal-dock__sep {
+  width: 1px;
+  height: 16px;
+  background: rgba(223, 178, 96, 0.25);
+}
+
+/* -------------------------------------------------- Sacred Aashirvaad / Diya Ritual */
+.scene--aashirvaad {
+  background: linear-gradient(180deg, #18090b 0%, #2b1116 50%, #16080a 100%);
+  color: #fffaf0;
+  padding: 60px 24px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(223, 178, 96, 0.25);
+}
+
+.aashirvaad__header {
+  margin-bottom: 32px;
+}
+
+.aashirvaad__title {
+  font-family: 'Hello Bride', cursive;
+  font-size: 72px;
+  color: #e5a753;
+  margin: 0;
+  line-height: 1.1;
+  text-shadow: 0 0 20px rgba(229, 167, 83, 0.3);
+}
+
+.aashirvaad__subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #d8c29d;
+  margin-top: 8px;
+}
+
+/* Diya Sanctuary Water Tank */
+.diya-pond {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  border-radius: 20px;
+  background: radial-gradient(circle at 50% 60%, #30171a 0%, #120406 100%);
+  border: 1.5px solid rgba(223, 178, 96, 0.3);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 8px 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  cursor: pointer;
+  margin: 20px 0 28px;
+  touch-action: manipulation;
+}
+
+.diya-pond__water {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(223, 178, 96, 0.05) 100%);
+}
+
+.diya-pond__hint {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: #e8c99b;
+  opacity: 0.8;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px dashed rgba(223, 178, 96, 0.3);
+}
+
+/* Floating Diya Entity */
+.floating-diya {
+  position: absolute;
+  width: 44px;
+  height: 38px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: diya-bob 4s ease-in-out infinite alternate;
+}
+
+.floating-diya__bowl {
+  position: absolute;
+  bottom: 0;
+  left: 2px;
+  right: 2px;
+  height: 20px;
+  background: radial-gradient(ellipse at 50% 30%, #e0a349 0%, #874e12 100%);
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+}
+
+.floating-diya__flame {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 20px;
+  background: radial-gradient(circle at 50% 80%, #ffffff 0%, #ffe17d 40%, #ff5e00 80%, transparent 100%);
+  border-radius: 50% 50% 35% 35%;
+  filter: drop-shadow(0 0 8px #ffb300);
+  animation: flame-jitter 0.8s ease-in-out infinite alternate;
+}
+
+.floating-diya__ripple {
+  position: absolute;
+  inset: -15px;
+  border: 1px solid rgba(223, 178, 96, 0.35);
+  border-radius: 50%;
+  animation: diya-ripple 3s ease-out infinite;
+}
+
+@keyframes diya-bob {
+  0% { transform: translate(-50%, -50%) rotate(-2deg); }
+  100% { transform: translate(-50%, calc(-50% - 6px)) rotate(2deg); }
+}
+
+@keyframes flame-jitter {
+  0% { transform: translateX(-50%) scale(0.9, 1.05) rotate(-2deg); }
+  50% { transform: translateX(-50%) scale(1.05, 0.95) rotate(1deg); }
+  100% { transform: translateX(-50%) scale(0.95, 1.1) rotate(2deg); }
+}
+
+@keyframes diya-ripple {
+  0% { transform: scale(0.4); opacity: 0.8; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Blessing Counter Badge */
+.blessing-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(223, 178, 96, 0.12);
+  border: 1px solid rgba(223, 178, 96, 0.35);
+  color: #dfb260;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+}
+
+/* Quick Blessing Buttons */
+.blessing-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.blessing-tag {
+  background: rgba(45, 18, 22, 0.7);
+  border: 1px solid rgba(223, 178, 96, 0.3);
+  color: #f3d8a6;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.blessing-tag:hover {
+  background: #a92a46;
+  color: #fff;
+  border-color: #dfb260;
+  transform: scale(1.04);
+}
+
+/* Blessing Wish Input */
+.wish-form {
+  display: flex;
+  gap: 8px;
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+
+.wish-input {
+  flex: 1;
+  background: rgba(18, 5, 8, 0.85);
+  border: 1px solid rgba(223, 178, 96, 0.35);
+  border-radius: 999px;
+  padding: 10px 18px;
+  color: #fff;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  outline: none;
+}
+
+.wish-input:focus {
+  border-color: #dfb260;
+  box-shadow: 0 0 12px rgba(223, 178, 96, 0.3);
+}
+
+.wish-submit {
+  background: linear-gradient(135deg, #dfb260 0%, #a92a46 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0 22px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.wish-submit:active {
+  transform: scale(0.96);
+}
+
+/* Wall of Wishes */
+.wishes-wall {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.wish-card {
+  background: rgba(40, 16, 20, 0.65);
+  border: 1px solid rgba(223, 178, 96, 0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+  text-align: left;
+  animation: card-appear 0.5s ease;
+}
+
+.wish-card__text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #faecc9;
+  font-style: italic;
+}
+
+.wish-card__author {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  color: #dfb260;
+  margin-top: 6px;
+  text-align: right;
+  letter-spacing: 0.05em;
+}
+
+@keyframes card-appear {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------- Royal Wardrobe Guide */
+.scene--wardrobe {
+  background: #140709;
+  color: #f7ebd4;
+  padding: 60px 20px 80px;
+  text-align: center;
+  border-top: 1px solid rgba(223, 178, 96, 0.2);
+}
+
+.wardrobe__title {
+  font-family: 'Hello Bride', cursive;
+  font-size: 68px;
+  color: #dfb260;
+  margin: 0;
+}
+
+.wardrobe__subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #b59b71;
+  margin-bottom: 30px;
+}
+
+.wardrobe__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.poshak-card {
+  background: rgba(30, 12, 15, 0.8);
+  border: 1px solid rgba(223, 178, 96, 0.25);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.poshak-card:hover {
+  transform: translateY(-4px);
+  border-color: #dfb260;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.5);
+}
+
+.poshak-card__palette {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.color-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.poshak-card__event {
+  font-family: 'Hello Bride', cursive;
+  font-size: 32px;
+  color: #e5a753;
+  margin-bottom: 4px;
+}
+
+.poshak-card__colors {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.poshak-card__desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  color: #c9b18c;
+  line-height: 1.4;
+}
+
+/* -------------------------------------------------- 1-Click Calendar Sync Section */
+.scene--calendar-sync {
+  background: radial-gradient(circle at 50% 30%, #290f14 0%, #100406 100%);
+  padding: 50px 20px 80px;
+  text-align: center;
+  border-top: 1px solid rgba(223, 178, 96, 0.2);
+}
+
+.cal-card {
+  background: rgba(35, 14, 18, 0.85);
+  border: 1.5px solid #dfb260;
+  border-radius: 20px;
+  padding: 32px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.6), inset 0 0 24px rgba(223, 178, 96, 0.1);
+}
+
+.cal-card__title {
+  font-family: 'Hello Bride', cursive;
+  font-size: 56px;
+  color: #dfb260;
+  margin: 0 0 8px;
+}
+
+.cal-card__desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: #e6ceaa;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.cal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cal-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.cal-btn--google {
+  background: #a92a46;
+  color: #fff;
+  border: 1px solid #dfb260;
+}
+
+.cal-btn--google:hover {
+  background: #c33554;
+  box-shadow: 0 6px 20px rgba(169, 42, 70, 0.4);
+}
+
+.cal-btn--ical {
+  background: transparent;
+  color: #dfb260;
+  border: 1px solid rgba(223, 178, 96, 0.6);
+}
+
+.cal-btn--ical:hover {
+  background: rgba(223, 178, 96, 0.15);
+  color: #fff;
+}
+
+/* -------------------------------------------------- Grand Fireworks Celebration Finale */
+.scene--grand-finale {
+  background: #0d0305;
+  padding: 70px 20px 100px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(223, 178, 96, 0.25);
+}
+
+.fireworks-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.finale__content {
+  position: relative;
+  z-index: 10;
+}
+
+.finale__title {
+  font-family: 'Hello Bride', cursive;
+  font-size: 64px;
+  color: #dfb260;
+  margin-bottom: 12px;
+}
+
+.celebrate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #dfb260 0%, #b87a28 50%, #a92a46 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 32px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(223, 178, 96, 0.4);
+  transition: all 0.3s ease;
+  margin-top: 18px;
+}
+
+.celebrate-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 12px 40px rgba(223, 178, 96, 0.6);
+}
+
+.celebrate-btn:active {
+  transform: scale(0.98);
+}
