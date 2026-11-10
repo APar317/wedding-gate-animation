@@ -1,0 +1,122 @@
+/* stage.css -- one PSD artboard, scaled as a unit.
+ *
+ * 1 design px = var(--u) = 100cqw / 1080, so every PSD number is used verbatim.
+ * Layers sit at their PSD bounds in % of the stage; z-index is the PSD paint order.
+ *
+ * TEXT IS PLACED BY BASELINE, metric-free: each .tl line carries a zero-width
+ * inline-block strut 1000 design px tall. An empty inline-block's baseline is its
+ * bottom edge, so the line's baseline lands exactly 1000u below the line top --
+ * top = baseline - 1000u puts the text on the PSD baseline in any font, including
+ * the Google-served ones whose metrics we never see.
+ */
+.stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  container-type: inline-size;
+  --u: calc(100cqw / 1080);
+}
+.base { position: absolute; inset: 0; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
+.ly { position: absolute; pointer-events: none; }
+.ly img { width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
+
+.shape {
+  position: absolute;
+  pointer-events: none;
+  border: calc(var(--sw) * var(--u)) solid var(--stroke, transparent);
+  border-radius: calc(var(--r) * var(--u));
+  background: var(--fill, transparent);
+  background-clip: padding-box;
+}
+
+.tb { position: absolute; inset: 0; pointer-events: none; }
+.tl {
+  position: absolute;
+  top: calc((var(--b) - 1000) * var(--u));
+  left: calc((var(--ax) - 540) * var(--u));
+  width: 100%;
+  font-size: 0;
+  line-height: 0;
+  white-space: pre;
+  text-align: center;
+  padding-left: calc(var(--trail, 0) * var(--u));
+}
+.tl::before {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: calc(1000 * var(--u));
+  vertical-align: baseline;
+}
+.tl--left { left: calc(var(--ax) * var(--u)); width: auto; text-align: left; }
+.tl--right { left: auto; right: calc((1080 - var(--ax)) * var(--u)); width: auto; text-align: right; }
+
+.r {
+  font-size: calc(var(--fs) * var(--u));
+  line-height: 1;
+  letter-spacing: var(--ls, 0);
+  font-kerning: normal;
+  font-synthesis: none;
+}
+.r.sup { vertical-align: calc(var(--raise) * var(--u)); }
+/* Photoshop Faux Bold: thicker outline AND ~0.027em wider advances. The outline
+   width is per face (--fbw, set by build.py FAUX_BOLD; measured with qa_text.py). */
+.r.fb {
+  -webkit-text-stroke: var(--fbw, 0.01em) currentColor;
+  paint-order: stroke fill;
+  letter-spacing: calc(var(--ls, 0em) + 0.027em);
+}
+/* Photoshop Faux Italic (Quattrocento has no italic face): a skew about the run's own
+   baseline. The run is an inline-block (same baseline, same advances); the origin is
+   the baseline inside its 1em box (Quattrocento metrics normalised: ascent .848,
+   descent .26 -> baseline .794em below the box top). --fi = Photoshop's slant. */
+.r.fi {
+  display: inline-block;
+  transform: skewX(calc(-1 * var(--fi, 12deg)));
+  transform-origin: 0 0.794em;
+}
+/* Photoshop Layer Style "Stroke" (Outside, N document px): a centred text-stroke of
+   2N px painted under the fill (--xs, design px; set by build.py), added to the
+   faux-bold stroke when both apply. */
+.r.xs {
+  -webkit-text-stroke: calc(var(--xs) * var(--u)) var(--xs-c);
+  paint-order: stroke fill;
+}
+.r.fb.xs { -webkit-text-stroke: calc(var(--fbw, 0.01em) + var(--xs) * var(--u)) var(--xs-c); }
+
+/* Maginia swash lines: the extra bottom padding only grows the line's box downward
+   (its top, and so the baseline, stay put) so the swash ink sits INSIDE the box --
+   iOS WebKit clips composited text to its box (repo memory ios-webkit-swash-clip). */
+.tl--script { padding-bottom: calc(var(--pb, 0) * var(--u)); }
+
+/* Real links laid over PSD art (venue "Way to the Celebration" pill). The pill
+   itself is the PSD layer underneath; the link adds hover / press / focus. */
+.hit {
+  position: absolute;
+  z-index: 60;
+  border-radius: calc(var(--rx, 14) * var(--u)) / calc(var(--ry, 14) * var(--u));
+  -webkit-tap-highlight-color: transparent;
+}
+.hit.cta { transition: background-color 160ms ease, transform 160ms ease; }
+.hit.cta:hover { background-color: rgba(255, 255, 255, 0.12); }
+.hit.cta:active { background-color: rgba(90, 20, 40, 0.12); }
+.hit.cta:focus-visible { outline: 3px solid #8a2f4b; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .hit.cta { transition: none; } }
+
+/* "Designed by Shagun Studio India" -- the studio credit set on the last slide under
+   KHANDELWAL FAMILY (build.py credit_html; copy + baseline in content.json). Same face
+   and ink as the family line, smaller and tracked so it reads as a colophon. The ::after
+   pads the tap target to ~44px without moving the text off its baseline. */
+.r.credit {
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  pointer-events: auto;
+  text-decoration: underline;
+  text-decoration-thickness: calc(1.5 * var(--u));
+  text-underline-offset: 0.24em;
+  -webkit-tap-highlight-color: transparent;
+}
+.r.credit::after { content: ""; position: absolute; inset: calc(-40 * var(--u)) calc(-20 * var(--u)); }
+.r.credit:hover { color: #a92a46 !important; }
+.r.credit:focus-visible { outline: 2px solid #a92a46; outline-offset: 4px; }

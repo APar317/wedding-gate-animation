@@ -1,0 +1,33 @@
+/* audio.css -- floating background-music toggle, bottom-right. js/audio.js swaps
+   the icon via .is-on; this file only styles. Hidden while the opening gate covers the
+   page (html.is-locked, removed by intro.js when the gate dissolves). */
+.vi-audio {
+  position: fixed;
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid rgba(255, 247, 232, 0.4);
+  border-radius: 50%;
+  background: rgba(74, 70, 38, 0.42);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #fdf3e3;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+html.is-locked .vi-audio { opacity: 0; pointer-events: none; }
+.vi-audio:focus-visible { outline: 2px solid #ab7c15; outline-offset: 2px; }
+.vi-audio__ico { width: 20px; height: 20px; pointer-events: none; }
+.vi-audio__ico-on { display: none; }
+.vi-audio.is-on .vi-audio__ico-on { display: block; }
+.vi-audio.is-on .vi-audio__ico-off { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vi-audio { transition: none; }
+}

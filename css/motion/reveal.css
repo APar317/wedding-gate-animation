@@ -1,0 +1,38 @@
+/* reveal.css -- generic per-scene entrance (js/motion/reveal.js). Contract: js/motion/kit.js.
+ *
+ * ARMED states live ONLY under html.motion (absent with reduced motion / no JS), so the
+ * static PSD frame is always the fallback. Only the roles reveal.js animates are armed
+ * (keep in sync with ROLES there); claimed nodes ([data-motion="custom"], set by a scene
+ * module via kit.claim) and claimed scenes are never armed here -- their module decides.
+ */
+html.motion .scene:not(.is-entered):not([data-motion="custom"]) .stage > .ly:is([data-role="flora"], [data-role="divider"], [data-role="ganesha"], [data-role="logo"]):not([data-motion="custom"]),
+html.motion .scene:not(.is-entered):not([data-motion="custom"]) .stage > .shape:not([data-motion="custom"]),
+html.motion .scene:not(.is-entered):not([data-motion="custom"]) .tb:not([data-motion="custom"]) .tl:not([data-motion="custom"]) {
+  opacity: 0;
+}
+
+/* Handwriting wipe on a Maginia line (.tl). reveal.js sets the mask geometry in px
+ * (--rv-mi / --rv-ms, from the line's ink box) and animates mask-position. The line's
+ * .tl--script bottom padding keeps the swash ink inside the mask box. */
+.rv-ink {
+  -webkit-mask-image: var(--rv-mi);
+  mask-image: var(--rv-mi);
+  -webkit-mask-size: var(--rv-ms);
+  mask-size: var(--rv-ms);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Warm glow that blooms behind Ganesha / the logo (added by reveal.js, removed when
+ * it settles). Small node: a few times the layer's box, capped at the stage width. */
+.rv-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 236, 200, 0.8) 0%,
+    rgba(255, 220, 170, 0.42) 38%,
+    rgba(250, 200, 150, 0.14) 68%,
+    rgba(250, 200, 150, 0) 100%);
+  opacity: 0;
+}

@@ -1,0 +1,149 @@
+/* scenes/rsvp.css -- styles for js/motion/scenes/rsvp.js (slide 7, rsvp).
+ * OWNER: the rsvp motion agent (edit only this file + its JS).
+ * Armed (hidden-before-entrance) states live ONLY under html.motion, so reduced motion /
+ * no JS shows the exact PSD frame. Every overlay is created by the JS (motion only), is
+ * pointer-events:none and never larger than the stage. Only transform / opacity animate;
+ * no filter / blend / will-change anywhere. Lengths are design px: calc(N * var(--u)). */
+
+/* ------------------------------------------------------------------ armed */
+html.motion [data-scene="rsvp"]:not(.is-entered) :is([data-text="rsvp.rsvp"], [data-text="rsvp.khandelwal-family"], [data-text="rsvp.firm"]) .tl,
+html.motion [data-scene="rsvp"]:not(.is-entered) .ly[data-rs-grow],
+html.motion [data-scene="rsvp"].rs-wait .ly[data-rs-grow] {
+  opacity: 0;
+}
+
+/* handwriting wipe on "Rsvp" (geometry set by the JS from the line's ink box) */
+.rs-ink {
+  -webkit-mask-image: var(--rs-mi);
+  mask-image: var(--rs-mi);
+  -webkit-mask-size: var(--rs-ms);
+  mask-size: var(--rs-ms);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* ------------------------------------------------------------------ wisteria pieces
+ * Two exact row pieces of each wisteria layer (assets/fx/rsvp/wisteria-*). They only
+ * show once both have decoded; then the layer's own img steps aside. */
+.rs-wpiece {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  visibility: hidden;
+}
+.rs-wpiece.is-on { visibility: visible; }
+[data-scene="rsvp"] .ly.rs-split > img { opacity: 0; }
+
+/* ------------------------------------------------------------------ golden hour on the palace
+ * Masked to the palace layer's own alpha (the mask image is the shipped palace webp, sized
+ * to the full layer; this box covers only its upper 720 rows = the facades). */
+.rs-sheen {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: var(--rs-mask);
+  mask-image: var(--rs-mask);
+  -webkit-mask-size: 100% var(--rs-mask-h);
+  mask-size: 100% var(--rs-mask-h);
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.rs-sheen__wash {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 2600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* low sun from the right: warm light on the right-hand facades, fading to the left */
+  background:
+    radial-gradient(ellipse 70% 90% at 92% 30%, rgba(255, 196, 112, 0.26) 0%, rgba(255, 196, 112, 0) 70%),
+    linear-gradient(90deg, rgba(255, 200, 130, 0.04) 0%, rgba(255, 190, 110, 0.16) 100%);
+}
+.rs-sheen__wash.is-on { opacity: 1; }
+.rs-sheen__win {
+  position: absolute;
+  display: block;
+  opacity: 0;
+  transition: opacity 1800ms ease-out;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.rs-sheen__win.is-on { opacity: 0.8; }
+.rs-sheen__band {
+  position: absolute;
+  left: 0;
+  top: -10%;
+  width: 46%;
+  height: 120%;
+  opacity: 0;
+  background: linear-gradient(90deg,
+    rgba(255, 214, 150, 0) 0%,
+    rgba(255, 220, 160, 0.34) 36%,
+    rgba(255, 244, 214, 0.62) 50%,
+    rgba(255, 220, 160, 0.34) 64%,
+    rgba(255, 214, 150, 0) 100%);
+}
+
+/* ------------------------------------------------------------------ fountain + fx */
+.rs-fountain { position: absolute; pointer-events: none; }
+.rs-fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.rs-petal, .rs-mote, .rs-spark, .rs-pen {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.rs-petal img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* the nib of the pen: a warm point of light */
+.rs-pen {
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 253, 242, 1) 0%, rgba(255, 236, 190, 0.9) 26%,
+    rgba(232, 186, 118, 0.38) 56%, rgba(232, 186, 118, 0) 100%);
+}
+
+/* four-point gold sparkle with a soft glow (deep enough to read on the pale sky) */
+.rs-spark::before, .rs-mote--star::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 250, 232, 0.95) 0%, rgba(250, 222, 160, 0.45) 40%, rgba(240, 205, 140, 0) 100%);
+}
+.rs-spark svg, .rs-mote svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: #f3cf7a;
+  stroke: rgba(176, 124, 44, 0.55);
+  stroke-width: 0.6;
+}
+
+/* a gold mote: a soft warm point */
+.rs-mote {
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 252, 236, 1) 0%, rgba(255, 226, 150, 0.9) 30%,
+    rgba(238, 190, 96, 0.4) 62%, rgba(238, 190, 96, 0) 100%);
+}
+.rs-mote--star { background: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rs-sheen, .rs-fountain, .rs-fx, .rs-wpiece { display: none; }
+  [data-scene="rsvp"] .ly.rs-split > img { opacity: 1; }
+}

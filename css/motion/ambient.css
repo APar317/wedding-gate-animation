@@ -1,0 +1,20 @@
+/* ambient.css -- overlays for js/motion/petals.js (tap-a-flower petals). Nothing here
+   changes the resting frame: overlays exist only while a petal is falling, and only
+   when motion runs (JS creates them only then). */
+.fx-petals {
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+}
+.fx-petal {
+  position: absolute;
+  height: auto;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx-petals { display: none; }
+}

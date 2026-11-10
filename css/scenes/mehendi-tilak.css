@@ -1,0 +1,211 @@
+/* scenes/mehendi-tilak.css -- styles for js/motion/scenes/mehendi-tilak.js (mehendi + tilak).
+   OWNER: the mehendi-tilak motion agent (edit only this file + its JS).
+
+   Every node styled here is created by the JS at runtime, and only when motion runs
+   (reduced motion / no JS -> none of it exists and both slides are the exact PSD frames).
+   Armed (hidden-before-entrance) states are scoped under html.motion and lifted by
+   .mt-go, which the JS adds when the scene enters. Coordinates are design px
+   (1 px = var(--u), set inline by the JS). Every overlay is a small node of plain
+   gradients that only animates transform + opacity (no filter / blend / will-change). */
+
+.mt-fx {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ------------------------------------------------------------- armed (before enter) */
+html.motion :is([data-scene="mehendi"], [data-scene="tilak"]):not(.mt-go) .ly[data-layer="couple"],
+html.motion :is([data-scene="mehendi"], [data-scene="tilak"]):not(.mt-go) :is(.mt-sun, .mt-pool, .mt-beam, .mt-mote, .mt-lglow, .mt-flame, .mt-star, .mt-bead) {
+  opacity: 0;
+}
+
+/* ================================================================== MEHENDI */
+
+/* Sun in the open sky above the skylight (behind the arch: only the opening shows it). */
+.mt-sun {
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 252, 236, 0.85) 0%,
+    rgba(255, 240, 200, 0.45) 30%,
+    rgba(255, 230, 185, 0.14) 62%,
+    rgba(255, 230, 185, 0) 100%);
+}
+
+/* Sun shafts: a soft ellipse brightest at the skylight lip, fading down its length.
+   Pivot = the lip; --pk = the shaft's peak strength (set per shaft by the JS). */
+.mt-beam {
+  transform-origin: 50% 0;
+  opacity: var(--pk, 0.7);
+  background: linear-gradient(180deg,
+    rgba(255, 247, 222, 0.3) 0%,
+    rgba(255, 247, 222, 0.9) 7%,
+    rgba(255, 241, 206, 0.6) 22%,
+    rgba(255, 235, 192, 0.26) 52%,
+    rgba(255, 235, 192, 0) 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.85) 24%, #000 50%, rgba(0, 0, 0, 0.85) 76%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.85) 24%, #000 50%, rgba(0, 0, 0, 0.85) 76%, transparent 100%);
+}
+.mt-mote {
+  border-radius: 50%;
+  opacity: 0.85;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 253, 240, 1) 0%,
+    rgba(255, 244, 214, 0.55) 45%,
+    rgba(255, 244, 214, 0) 100%);
+}
+/* Pool of sunlight on the platform in front of the sofa. */
+.mt-pool {
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(255, 238, 196, 0.7) 0%,
+    rgba(255, 226, 176, 0.3) 55%,
+    rgba(255, 230, 186, 0) 100%);
+}
+
+/* Lantern / diya: a warm glow on the steps + a flickering flame core. */
+.mt-lglow {
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 204, 122, 0.9) 0%,
+    rgba(255, 172, 92, 0.46) 26%,
+    rgba(255, 152, 80, 0.16) 58%,
+    rgba(255, 170, 96, 0) 100%);
+}
+.mt-lglow--diya {
+  background: radial-gradient(circle closest-side,
+    rgba(255, 210, 130, 0.6) 0%,
+    rgba(255, 180, 100, 0.25) 35%,
+    rgba(255, 170, 96, 0) 100%);
+}
+.mt-flame {
+  transform-origin: 50% 85%;
+  border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+  background: radial-gradient(ellipse 50% 50% at 50% 62%,
+    rgba(255, 255, 240, 0.95) 0%,
+    rgba(255, 236, 170, 0.75) 30%,
+    rgba(255, 196, 110, 0.28) 62%,
+    rgba(255, 180, 100, 0) 100%);
+}
+
+/* Overlay planes for petals / henna / tap sparkles (inset 0 = exactly stage-sized,
+   transparent, never animated themselves). */
+.mt-layer { overflow: hidden; }
+.mt-petal {
+  position: absolute;
+  height: auto;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Henna: the paste line (dark, with a thin wet shine on top), fine lines, dots. */
+.mt-henna svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.mt-henna path, .mt-henna circle { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+/* (stroke widths are set inline by the JS so they match across group scales) */
+.mt-henna .mt-h-paste { stroke: #451a09; }
+.mt-henna .mt-h-shine { stroke: #b8733f; opacity: 0.8; }
+.mt-henna .mt-h-fine { stroke: #4e200d; }
+.mt-henna .mt-h-dot { fill: #451a09; stroke: none; }
+
+/* ================================================================== TILAK */
+
+/* Everything in the night window sits behind the arch (the arch is the mask). */
+.mt-sky { overflow: hidden; }
+.mt-star {
+  border-radius: 50%;
+  opacity: 0.7;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(232, 240, 255, 0.55) 30%,
+    rgba(220, 232, 255, 0) 100%);
+}
+.mt-star--big { background: none; }
+.mt-star--big::before,
+.mt-star--big::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 47%;
+  width: 100%;
+  height: 6%;
+  border-radius: 50%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 0));
+}
+.mt-star--big::after { transform: rotate(90deg); }
+.mt-star--big > i {
+  position: absolute;
+  inset: 32%;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side, #fff 0%, rgba(230, 238, 255, 0.6) 45%, rgba(230, 238, 255, 0) 100%);
+}
+.mt-shoot {
+  opacity: 0;
+  border-radius: 50%;
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(220, 232, 255, 0.35) 55%,
+    rgba(255, 255, 255, 0.95) 96%,
+    #fff 100%);
+}
+.mt-canvas { display: block; }
+
+/* Toran pearls: a soft halo that breathes; ring: a warm halo under the glint. */
+.mt-bead {
+  border-radius: 50%;
+  opacity: 0.35;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 250, 230, 0.9) 0%,
+    rgba(255, 238, 200, 0.4) 40%,
+    rgba(255, 238, 200, 0) 100%);
+}
+.mt-ring-halo {
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 250, 230, 0.95) 0%,
+    rgba(255, 226, 160, 0.45) 40%,
+    rgba(255, 226, 160, 0) 100%);
+}
+
+/* Four-point glint (bells, ring, tap burst). */
+.mt-spark { opacity: 0; }
+.mt-spark::before,
+.mt-spark::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 46%;
+  width: 100%;
+  height: 8%;
+  border-radius: 50%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff 50%, rgba(255, 255, 255, 0));
+}
+.mt-spark::after { transform: rotate(90deg); }
+.mt-spark > i {
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side, #fff 0%, rgba(255, 250, 230, 0.6) 45%, rgba(255, 250, 230, 0) 100%);
+}
+.mt-spark--gold::before,
+.mt-spark--gold::after {
+  background: linear-gradient(90deg, rgba(255, 220, 140, 0), #fff6dc 50%, rgba(255, 220, 140, 0));
+}
+.mt-spark--gold > i {
+  background: radial-gradient(circle closest-side, #fffbea 0%, rgba(255, 214, 120, 0.7) 45%, rgba(255, 214, 120, 0) 100%);
+}
+.mt-glitter {
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle closest-side, #fff6d6 0%, rgba(240, 196, 96, 0.9) 45%, rgba(240, 196, 96, 0) 100%);
+}
+.mt-glitter--w {
+  background: radial-gradient(circle closest-side, #fff 0%, rgba(255, 250, 235, 0.7) 45%, rgba(255, 250, 235, 0) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-fx, .mt-petal { display: none; }
+}

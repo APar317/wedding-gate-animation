@@ -1,0 +1,296 @@
+/* intro.css -- the opening temple gate on the Kashi ghat (js/intro.js; DOM from
+ * tools/build.py, geometry from data/gate.json, sprites from tools/make_gate.py).
+ *
+ * PRE-PAINT GATE: the inline <head> script adds html.gate-armed before the body is
+ * parsed, so the very first paint is the closed gate (its tiny poster is inlined as
+ * the stage background). Without JS the class never appears: .gate stays display:none
+ * and the slides show (nothing traps the page).
+ *
+ * LAYOUT: .gate (fixed, page colour) > .gate__frame (the same centred column the
+ * slides use: --col; a size container) > .gate__cam (the camera push: transform only)
+ * > .gate__stage (the 1520x2688 painting, "cover"-fitted to the frame, a little above
+ * centre so the bell and the doors are never cropped) > .gate__art (every sprite,
+ * shown together once they have decoded: .is-ready) + the pill.
+ *
+ * STATES (classes on .gate, set by intro.js)
+ *   .is-ready    base + leaves + toran + bell decoded: art fades in over the poster,
+ *                the pill rises
+ *   .has-pill    safety: the pill shows after 10 s even if decoding stalled
+ *   .is-opening  tapped: the pill retires (WAAPI in intro.js plays the opening)
+ *   .is-leaving  the dissolve: opacity only, --gate-fade; intro.js removes the node on
+ *                transitionend with a fallback that MUST outlast --gate-fade
+ *
+ * iOS: transform / opacity only; no filter / backdrop-filter / mix-blend-mode /
+ * will-change anywhere here. The biggest nodes (base, bloom) are frame / stage sized
+ * and only ever change opacity or ride the camera's transform.
+ */
+.gate { display: none; }
+html.gate-armed .gate {
+  --gate-fade: 900ms;
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--page);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: opacity var(--gate-fade) cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+.gate.is-leaving { opacity: 0; pointer-events: none; }
+.gate.is-opening { cursor: default; }
+
+.gate__frame {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--col);
+  margin-left: calc(var(--col) / -2);
+  overflow: hidden;
+  container-type: size;
+}
+.gate__cam {
+  position: absolute;
+  inset: 0;
+  /* the painting, cover-fitted to the frame (resolved against .gate__frame) */
+  --sw: max(100cqw, calc(100cqh * 1520 / 2688));
+  --sh: calc(var(--sw) * 2688 / 1520);
+}
+.gate__stage {
+  position: absolute;
+  width: var(--sw);
+  height: var(--sh);
+  left: calc((100cqw - var(--sw)) / 2);
+  top: calc((100cqh - var(--sh)) * 0.45);
+  background-color: #e6b68c;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.gate__art {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 450ms ease;
+}
+.gate.is-ready .gate__art { opacity: 1; }
+.gate__art img, .gate__art i, .gate__art span, .gate__portal, .gate__sanctum, .gate__seam, .gate__bell-sway {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+.gate__art [hidden] { display: none; }
+.gate__base { inset: 0; width: 100%; height: 100%; }
+
+/* ------------------------------------------------------------ the doorway */
+/* the sanctum's own light, clipped to the doorway, behind the leaves */
+.gate__sanctum { overflow: hidden; }
+.gate__sanctum-glow { left: -35%; top: 10%; width: 170%; height: 110%; opacity: 0; }
+
+.gate__portal {
+  /* a small perspective box: the leaves swing INWARD (away from the guest) about
+     their outer hinges */
+  perspective: calc(var(--sw) * 0.8);
+  perspective-origin: 50% 55%;
+}
+.gate__leaf { position: absolute; top: 0; height: 100%; backface-visibility: hidden; }
+.gate__leaf--l { left: 0; transform-origin: 0 50%; }
+.gate__leaf--r { right: 0; transform-origin: 100% 50%; }
+.gate__leaf > img { left: 0; top: 0; width: 100%; height: 100%; }
+/* darker toward the hinge as the leaf turns from the light, lit at its free edge */
+.gate__leaf > i { inset: 0; opacity: 0; }
+.gate__leaf--l > i { background: linear-gradient(90deg, rgba(34, 16, 4, 0.62) 0%, rgba(34, 16, 4, 0.25) 72%, rgba(255, 222, 160, 0.4) 100%); }
+.gate__leaf--r > i { background: linear-gradient(270deg, rgba(34, 16, 4, 0.62) 0%, rgba(34, 16, 4, 0.25) 72%, rgba(255, 222, 160, 0.4) 100%); }
+
+/* the golden line between the closed leaves + its soft halo */
+.gate__seam > img { left: 0; top: 0; width: 100%; height: 100%; }
+.gate__seam > i {
+  left: -260%;
+  right: -260%;
+  top: 0;
+  bottom: 0;
+  opacity: 0.5;
+  background: linear-gradient(90deg,
+    rgba(255, 200, 110, 0) 0%, rgba(255, 206, 120, 0.2) 36%, rgba(255, 232, 170, 0.55) 48%,
+    rgba(255, 244, 210, 0.7) 50%, rgba(255, 232, 170, 0.55) 52%, rgba(255, 206, 120, 0.2) 64%, rgba(255, 200, 110, 0) 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 90%, transparent 100%);
+}
+/* light leaking under the closed doors onto the threshold */
+.gate__underglow {
+  opacity: 0.45;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 236, 190, 0.95), rgba(255, 214, 140, 0.4) 55%, rgba(255, 200, 120, 0) 100%);
+}
+.gate__bell { left: 0; top: 0; width: 100%; height: 100%; }
+
+/* ------------------------------------------------------------ ambient sprites */
+.gate__flame { opacity: 0.75; }
+.gate__glint { opacity: 0; }
+.gate__mote { opacity: 0; }
+.gate__spill, .gate__halo { opacity: 0; }
+.gate__petals { position: absolute; inset: 0; pointer-events: none; }
+.gate__petal { height: auto; opacity: 0; }
+
+/* ------------------------------------------------------------ the pill */
+/* Ivory pill in the slides' hint style (css/motion/hints.css .th-pill), px-sized
+   here: the gate has no 1080-px stage unit. Low on the steps, between the diyas. */
+.gate__open {
+  position: absolute;
+  left: 50%;
+  top: 90.8%;
+  z-index: 5;
+  translate: -50% -50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  min-height: 44px;
+  margin: 0;
+  padding: 0.5em 1.45em 0.5em 0.8em;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 251, 241, 0.9);
+  box-shadow: inset 0 0 0 1.5px rgba(184, 134, 43, 0.6), 0 6px 22px rgba(60, 34, 12, 0.32);
+  color: #6a3416;
+  font: 600 clamp(16px, 4.6cqw, 20px)/1.15 "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  letter-spacing: 0.035em;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 600ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 900ms;
+}
+.gate.is-ready .gate__open, .gate.has-pill .gate__open {
+  pointer-events: auto;
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition: opacity 600ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s;
+}
+.gate.is-opening .gate__open {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  animation: none;
+  transition: opacity 240ms ease, visibility 0s linear 240ms;
+}
+.gate__open:focus-visible { outline: 2px solid #ab7c15; outline-offset: 4px; }
+.gate__open::before {        /* a wider tap target round the pill */
+  content: "";
+  position: absolute;
+  inset: -8px -6px;
+  border-radius: 999px;
+}
+/* the tap gesture in miniature (hints.css .th-tap) */
+.gate__tap {
+  position: relative;
+  flex: none;
+  width: 1.45em;
+  height: 1.45em;
+  color: #b8862b;
+}
+.gate__tap::before {
+  content: "";
+  position: absolute;
+  inset: 16%;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.45;
+}
+.gate__tap > span {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+}
+.gate__tap > i {
+  position: absolute;
+  left: 33%;
+  top: 33%;
+  width: 34%;
+  height: 34%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, #fffdf7 0%, #f6e3b8 52%, rgba(184, 134, 43, 0.85) 100%);
+  box-shadow: 0 0 4px rgba(214, 160, 70, 0.7);
+}
+
+/* the warm golden bloom the camera pushes into (frame-sized, opacity only) */
+.gate__bloom {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--ox, 50%) var(--oy, 55%),
+    #fffaf0 0%, rgba(255, 238, 200, 0.98) 30%, rgba(252, 214, 150, 0.95) 65%, rgba(240, 190, 120, 0.92) 100%);
+}
+
+/* ------------------------------------------------------------ waiting ambient */
+/* Visible but gentle; motion only. Reduced motion = the still painting. */
+@media (prefers-reduced-motion: no-preference) {
+  .gate__bell-sway { animation: gate-sway 5.2s ease-in-out infinite; }
+  .gate__seam > img { animation: gate-seam 3.8s ease-in-out infinite; }
+  .gate__seam > i { animation: gate-halo 3.8s ease-in-out infinite; }
+  .gate__underglow { animation: gate-under 3.8s ease-in-out 0.4s infinite; }
+  .gate__flame { animation: gate-flicker var(--t, 1.6s) linear var(--d, 0s) infinite; }
+  .gate__glint { animation: gate-glint var(--t, 3.4s) ease-in-out var(--d, 0s) infinite; }
+  .gate__mote { animation: gate-mote var(--t, 9s) linear var(--d, 0s) infinite; }
+  .gate.is-ready .gate__open, .gate.has-pill .gate__open { animation: gate-float 2.8s ease-in-out 0.9s infinite; }
+  .gate.is-ready .gate__tap > span, .gate.has-pill .gate__tap > span { animation: gate-ring-out 2.2s cubic-bezier(0.33, 1, 0.68, 1) infinite; }
+  .gate.is-ready .gate__tap > span + span, .gate.has-pill .gate__tap > span + span { animation-delay: 300ms; }
+  .gate.is-ready .gate__tap > i, .gate.has-pill .gate__tap > i { animation: gate-core-beat 2.2s cubic-bezier(0.33, 1, 0.68, 1) infinite; }
+}
+@keyframes gate-sway { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
+@keyframes gate-seam { 0%, 100% { opacity: 0.82; } 50% { opacity: 1; } }
+@keyframes gate-halo { 0%, 100% { opacity: 0.32; transform: scaleX(0.85); } 50% { opacity: 0.75; transform: scaleX(1.12); } }
+@keyframes gate-under { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.62; } }
+@keyframes gate-flicker {
+  0% { opacity: 0.72; transform: scale(1, 1); }
+  13% { opacity: 0.9; transform: scale(1.06, 1.1); }
+  21% { opacity: 0.62; transform: scale(0.96, 0.94); }
+  38% { opacity: 0.85; transform: scale(1.02, 1.06); }
+  52% { opacity: 0.7; transform: scale(0.98, 0.97); }
+  66% { opacity: 0.95; transform: scale(1.07, 1.12); }
+  81% { opacity: 0.66; transform: scale(0.97, 0.95); }
+  100% { opacity: 0.72; transform: scale(1, 1); }
+}
+@keyframes gate-glint {
+  0%, 62%, 100% { opacity: 0; transform: scale(0.4, 0.3); }
+  76% { opacity: 0.95; transform: scale(1.6, 0.7); }
+}
+@keyframes gate-mote {          /* rises through the seam light, swaying (frame units) */
+  0% { opacity: 0; transform: translate(0, 0); }
+  15% { opacity: 0.85; }
+  50% { transform: translate(calc(var(--dx, 1) * 1.6cqw), -5cqh); }
+  85% { opacity: 0.6; }
+  100% { opacity: 0; transform: translate(calc(var(--dx, 1) * -1cqw), -10cqh); }
+}
+@keyframes gate-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes gate-ring-out {
+  0% { opacity: 0; transform: scale(0.3); }
+  6% { opacity: 1; }
+  32%, 100% { opacity: 0; transform: scale(1.16); }
+}
+@keyframes gate-core-beat {
+  0% { transform: scale(1); }
+  4% { transform: scale(1.26); }
+  11% { transform: scale(1); }
+  18% { transform: scale(1.22); }
+  26%, 100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.gate-armed .gate { --gate-fade: 250ms; }
+  .gate__art { transition: none; }
+}

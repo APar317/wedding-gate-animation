@@ -1,0 +1,24 @@
+/* fonts.css -- the faces the PSDs name (PostScript name -> CSS family / weight).
+ * All woff2 files are built by tools/build_fonts.py (subset to the PSD charset,
+ * stylistic sets kept, metrics normalised).
+ *
+ *   Maginia-Regular            -> Maginia 400             "Vansh" / "Ishika" (names slide)
+ *       TODO(production): fsType 4 (preview & print) -- confirm the web-embedding
+ *       licence (same file as suryanshu-rajvi / hardik-nandini).
+ *   HelloBrideScript-Regular   -> Hello Bride 400         event titles, "&", "Rsvp"
+ *       50Fox Studio, fsType 4. TODO(production): confirm the web-embedding licence
+ *       (same face already shipped by ~10 templates in this repo).
+ *   CormorantGaramond-Medium / -SemiBold / -Bold -> Cormorant Garamond 500 / 600 / 700
+ *       OFL (google/fonts), static instances of the variable font. tools/fonts-src/OFL-CormorantGaramond.txt
+ *   FelixTitlingMT             -> Cormorant Garamond 500, uppercase. Felix Titling MT is
+ *       replaced by Cormorant Garamond by owner's choice (2026-10-22); size and tracking
+ *       are calibrated to the PSD (extract_text.py FONT_CALIBRATION).
+ *
+ * Text is placed by baseline with a metric-free strut (stage.css), so fallback
+ * metrics never move a line; font-display:block avoids a fallback-face flash.
+ */
+@font-face { font-family: "Maginia"; src: url("../assets/fonts/maginia-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Hello Bride"; src: url("../assets/fonts/hello-bride-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Cormorant Garamond"; src: url("../assets/fonts/cormorant-garamond-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+@font-face { font-family: "Cormorant Garamond"; src: url("../assets/fonts/cormorant-garamond-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+@font-face { font-family: "Cormorant Garamond"; src: url("../assets/fonts/cormorant-garamond-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }

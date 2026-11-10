@@ -1,0 +1,289 @@
+/* scenes/monogram-names.css -- styles for js/motion/scenes/monogram-names.js (monogram (PDF p1) + names (PDF p2)).
+   OWNER: the monogram-names motion agent (edit only this file + its JS + assets/fx/monogram-names/).
+   Both sections are claimed whole by the JS. Armed (hidden / offset before the entrance)
+   states live ONLY under html.motion, so reduced motion / no JS / a module that failed to
+   load all show the exact PSD frame. Every overlay is created by the JS (none exist with
+   reduced motion), pointer-events:none unless it is the shrine button, never larger than
+   the stage, transform/opacity only. */
+
+/* ---------------------------------------------------------------- armed */
+html.motion .scene--monogram:not(.is-entered) .stage > .ly[data-layer="monogram"],
+html.motion .scene--monogram:not(.is-entered) .tb .tl,
+html.motion .scene--names:not(.is-entered) .stage > .ly:is([data-layer="ganesha"], [data-layer="divider"]),
+html.motion .scene--names:not(.is-entered) .tb .tl {
+  opacity: 0;
+}
+/* behind the veil the two hands rest a little apart (= HAND_FROM in the JS), only ever
+   away from the stage edge that cuts them */
+html.motion .scene--monogram:not(.is-entered) .stage > .ly[data-layer="shiva-hand"] {
+  transform: translate(calc(-70 * var(--u)), calc(14 * var(--u)));
+}
+html.motion .scene--monogram:not(.is-entered) .stage > .ly[data-layer="parvati-hand"] {
+  transform: translate(calc(64 * var(--u)), calc(-8 * var(--u)));
+}
+
+/* ---------------------------------------------------------------- pivots */
+.scene--monogram [data-layer="dupatta"] { transform-origin: 100% 50%; }   /* narrows toward its cut edge */
+.scene--monogram [data-layer="dupatta"] img { transform-origin: 0 0; }    /* cloth hangs from its top */
+.scene--monogram [data-layer="tree"] img { transform-origin: 0 0; }
+.scene--monogram [data-layer="vine"] img { transform-origin: 0 50%; }
+.scene--monogram [data-layer="flower-bed"] img { transform-origin: 50% 100%; }
+.scene--names [data-layer="tree"] img { transform-origin: 0 100%; }
+.scene--names :is([data-layer="shiva-parvati"], [data-layer^="aarti-priest"], [data-layer^="aarti-flame"], [data-layer^="lotus-"]) img {
+  transform-origin: 50% 100%;
+}
+
+/* Handwriting wipe (geometry set in px by the JS). */
+.mn-ink {
+  -webkit-mask-image: var(--mn-mi);
+  mask-image: var(--mn-mi);
+  -webkit-mask-size: var(--mn-ms);
+  mask-size: var(--mn-ms);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* ---------------------------------------------------------------- shared fx */
+:is(.mn-spark, .mn-pen, .mn-glow, .mn-touch, .mn-blush, .mn-halo, .mn-rays, .mn-water, .mn-ripple, .mn-flame,
+  .mn-foil, .mn-drift, .mn-ember, .mn-ghalo, .mn-grays, .mn-dglint, .mn-river, .mn-streak, .mn-reflect,
+  .mn-fireglow, .mn-bokeh, .mn-embers, .mn-rring) {
+  position: absolute;
+  pointer-events: none;
+}
+:is(.mn-spark, .mn-pen, .mn-glow, .mn-touch, .mn-blush, .mn-ripple, .mn-ember, .mn-dglint, .mn-rring) { opacity: 0; }
+
+.mn-spark::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 250, 232, 0.95) 0%, rgba(250, 222, 160, 0.45) 40%, rgba(240, 205, 140, 0) 100%);
+}
+.mn-spark svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: #f6d27e;
+  stroke: rgba(176, 124, 44, 0.55);
+  stroke-width: 0.6;
+}
+
+.mn-pen, .mn-ember, .mn-dglint {
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 253, 240, 1) 0%, rgba(255, 222, 150, 0.9) 30%,
+    rgba(240, 170, 80, 0.4) 62%, rgba(240, 170, 80, 0) 100%);
+}
+.mn-glow, .mn-touch {
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 248, 226, 0.75) 0%, rgba(255, 232, 190, 0.42) 30%,
+    rgba(250, 216, 170, 0.16) 58%, rgba(250, 214, 168, 0) 100%);
+}
+.mn-touch {
+  background: radial-gradient(circle closest-side,
+    rgba(255, 250, 230, 0.85) 0%, rgba(255, 220, 150, 0.45) 28%,
+    rgba(250, 200, 130, 0.14) 60%, rgba(250, 200, 130, 0) 100%);
+}
+.mn-blush {
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 228, 226, 0.95) 0%, rgba(244, 190, 196, 0.45) 40%, rgba(244, 190, 196, 0) 100%);
+}
+
+/* ---------------------------------------------------------------- monogram */
+/* glint: masked to the monogram's own pixels; only the band moves */
+.mn-foil {
+  overflow: hidden;
+  -webkit-mask-image: var(--mn-src);
+  mask-image: var(--mn-src);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.mn-foil-band {
+  position: absolute;
+  inset: -30% -60%;
+  opacity: 0;
+  background: linear-gradient(115deg,
+    rgba(255, 236, 170, 0) 38%, rgba(255, 226, 140, 0.75) 46%, rgba(255, 252, 236, 0.95) 50%,
+    rgba(255, 226, 140, 0.75) 54%, rgba(255, 236, 170, 0) 62%);
+}
+
+/* the Shivling's halo + slow rays (rest faint after the entrance) */
+.mn-halo {
+  opacity: 0.7;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 252, 238, 0.95) 0%, rgba(255, 214, 130, 0.8) 22%, rgba(250, 170, 80, 0.5) 42%,
+    rgba(245, 150, 70, 0.2) 66%, rgba(245, 150, 70, 0) 100%);
+}
+.mn-rays {
+  opacity: 0.45;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg,
+    rgba(238, 160, 70, 0.7) 0deg 2.4deg, rgba(238, 160, 70, 0) 5deg 18deg);
+  -webkit-mask-image: radial-gradient(circle closest-side, transparent 22%, #000 34%, rgba(0, 0, 0, 0.45) 55%, transparent 74%);
+  mask-image: radial-gradient(circle closest-side, transparent 22%, #000 34%, rgba(0, 0, 0, 0.45) 55%, transparent 74%);
+}
+
+/* basin water: the ellipse clips its ripples / streaks / reflections */
+.mn-water { overflow: hidden; border-radius: 50%; }
+.mn-ripple {
+  border-radius: 50%;
+  border: calc(3 * var(--u)) solid rgba(255, 251, 238, 0.85);
+  box-shadow: 0 0 calc(8 * var(--u)) rgba(255, 240, 200, 0.5), inset 0 0 calc(6 * var(--u)) rgba(255, 240, 200, 0.4);
+}
+.mn-streak {
+  opacity: 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 250, 0.95), rgba(240, 248, 255, 0.5) 55%, rgba(240, 248, 255, 0));
+}
+.mn-reflect {
+  opacity: 0.5;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 238, 170, 0.95), rgba(255, 200, 110, 0.45) 55%, rgba(255, 200, 110, 0));
+}
+
+/* a flickering flame: glow + sprite, anchored at the wick */
+.mn-flame { transform-origin: 50% 100%; }
+.mn-flame > i { position: absolute; display: block; }
+.mn-flame-core {
+  inset: 0;
+  background: url("../../assets/fx/monogram-names/flame.webp") center / 100% 100% no-repeat;
+  transform-origin: 50% 100%;
+  opacity: 0.85;
+}
+.mn-flame-glow {
+  left: -140%;
+  width: 380%;
+  top: -10%;
+  height: 160%;
+  border-radius: 50%;
+  opacity: 0.65;
+  background: radial-gradient(closest-side,
+    rgba(255, 236, 170, 0.75) 0%, rgba(255, 200, 110, 0.32) 45%, rgba(255, 180, 90, 0) 100%);
+}
+
+.mn-drift { overflow: hidden; }
+.mn-petal {
+  position: absolute;
+  height: auto;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* the Shivling + basin is a button (flames flare, ripples, rising sparks) */
+.mn-shrine-btn {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 46% / 40%;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mn-shrine-btn:focus-visible { outline: 2px solid #c25a7a; outline-offset: -8px; }
+
+/* ---------------------------------------------------------------- names */
+.mn-ghalo {
+  opacity: 0.42;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    rgba(255, 238, 190, 0.95) 0%, rgba(250, 214, 140, 0.55) 34%,
+    rgba(240, 196, 120, 0.18) 62%, rgba(240, 196, 120, 0) 100%);
+}
+.mn-grays {
+  opacity: 0.38;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg,
+    rgba(236, 196, 118, 0.55) 0deg 2.2deg, rgba(236, 196, 118, 0) 5deg 22.5deg);
+  -webkit-mask-image: radial-gradient(circle closest-side, transparent 14%, #000 26%, rgba(0, 0, 0, 0.5) 46%, transparent 68%);
+  mask-image: radial-gradient(circle closest-side, transparent 14%, #000 26%, rgba(0, 0, 0, 0.5) 46%, transparent 68%);
+}
+
+/* the river band: everything above the Ganga occludes what is drawn here */
+.mn-river { overflow: hidden; }
+.mn-streak--river {
+  background: radial-gradient(closest-side, rgba(255, 255, 250, 1), rgba(255, 244, 226, 0.6) 55%, rgba(255, 236, 214, 0));
+}
+.mn-reflect--aarti {
+  background: radial-gradient(closest-side, rgba(255, 214, 130, 0.95), rgba(250, 160, 70, 0.45) 55%, rgba(250, 160, 70, 0));
+}
+.mn-rring {
+  border-radius: 50%;
+  border: calc(2.5 * var(--u)) solid rgba(255, 250, 236, 0.85);
+  box-shadow: 0 0 calc(6 * var(--u)) rgba(255, 240, 210, 0.45);
+}
+.mn-fireglow {
+  opacity: 0.8;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(255, 226, 150, 0.85) 0%, rgba(255, 170, 80, 0.4) 40%, rgba(240, 130, 50, 0) 100%);
+}
+.mn-bokeh {
+  opacity: 0.4;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(255, 240, 200, 0.85) 0%, rgba(255, 210, 140, 0.35) 50%, rgba(255, 210, 140, 0) 100%);
+}
+.mn-ember--small {
+  background: radial-gradient(circle closest-side,
+    rgba(255, 250, 220, 1) 0%, rgba(255, 190, 90, 0.85) 40%, rgba(240, 140, 50, 0) 100%);
+}
+
+/* ---------------------------------------------------------------- loops (CSS) */
+.mn-on .mn-flame-core { animation: mn-flick 1.2s ease-in-out infinite; }
+.mn-on .mn-flame-glow { animation: mn-glowp 2.6s ease-in-out infinite; }
+.mn-on .mn-streak { animation: mn-streak 7s ease-in-out infinite; }
+.mn-on .mn-reflect { animation: mn-reflect 2s ease-in-out infinite; }
+.mn-on .mn-fireglow { animation: mn-fire 2s ease-in-out infinite; }
+.mn-on .mn-bokeh { animation: mn-bokeh 3.4s ease-in-out infinite; }
+.mn-away :is(.mn-flame-core, .mn-flame-glow, .mn-streak, .mn-reflect, .mn-fireglow, .mn-bokeh) {
+  animation-play-state: paused;
+}
+
+@keyframes mn-flick {
+  0%, 100% { transform: scale(1, 1) skewX(0deg); opacity: 0.82; }
+  18%  { transform: scale(0.9, 1.12) skewX(3deg); opacity: 1; }
+  37%  { transform: scale(1.06, 0.92) skewX(-2deg); opacity: 0.76; }
+  58%  { transform: scale(0.93, 1.16) skewX(1.5deg); opacity: 0.97; }
+  79%  { transform: scale(1.03, 0.96) skewX(-2.5deg); opacity: 0.84; }
+}
+@keyframes mn-glowp {
+  0%, 100% { opacity: 0.55; transform: scale(0.92); }
+  50%      { opacity: 0.95; transform: scale(1.1); }
+}
+@keyframes mn-streak {
+  0%   { opacity: 0; transform: translateX(0) scaleX(0.6); }
+  35%  { opacity: 1; transform: translateX(calc(var(--dx) * 0.45)) scaleX(1); }
+  65%  { opacity: 0.5; transform: translateX(calc(var(--dx) * 0.75)) scaleX(0.9); }
+  100% { opacity: 0; transform: translateX(var(--dx)) scaleX(0.65); }
+}
+@keyframes mn-reflect {
+  0%, 100% { opacity: 0.45; transform: scale(0.75, 1); }
+  30%      { opacity: 0.85; transform: scale(1.2, 0.8); }
+  60%      { opacity: 0.6; transform: scale(0.95, 1.15); }
+}
+@keyframes mn-fire {
+  0%, 100% { opacity: 0.7; transform: scale(0.92); }
+  40%      { opacity: 1; transform: scale(1.08); }
+  70%      { opacity: 0.82; transform: scale(0.98); }
+}
+@keyframes mn-bokeh {
+  0%, 100% { opacity: 0.25; transform: scale(0.9); }
+  50%      { opacity: 0.75; transform: scale(1.12); }
+}
+
+/* ---------------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :is(.mn-spark, .mn-pen, .mn-glow, .mn-touch, .mn-blush, .mn-halo, .mn-rays, .mn-water, .mn-flame, .mn-foil,
+    .mn-drift, .mn-ember, .mn-ghalo, .mn-grays, .mn-dglint, .mn-river, .mn-fireglow, .mn-bokeh, .mn-embers,
+    .mn-shrine-btn) { display: none; }
+}

@@ -1,0 +1,137 @@
+/* hints.css -- "Tap to ..." pills + target rings (js/motion/hints.js). Ported from
+ * suryanshu-rajvi (wedding-finale .wf-pill / .wf-tap / .wf-fountain-hint), re-toned light:
+ * an ivory, translucent pill with henna-brown type and a small gold tap-ripple icon.
+ * Small nodes only (no stage-sized layer); transform / opacity animate. Built only when
+ * motion runs, and hidden under reduced motion as a safety net (exact PSD frame). */
+.th-pill {
+  position: absolute;
+  z-index: 120;                /* above every tap-effect overlay and PSD layer (max z 95): no effect hides the label */
+  translate: -50% -50%;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(14 * var(--u));
+  margin: 0;
+  padding: calc(13 * var(--u)) calc(38 * var(--u)) calc(13 * var(--u)) calc(20 * var(--u));
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 251, 241, 0.84);
+  box-shadow: inset 0 0 0 calc(2.4 * var(--u)) rgba(184, 134, 43, 0.55),
+    0 calc(8 * var(--u)) calc(26 * var(--u)) rgba(60, 34, 12, 0.28);
+  color: #6a3416;
+  font: 600 max(13px, calc(38 * var(--u)))/1.15 "Cormorant Garamond", Georgia, serif;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(calc(16 * var(--u)));
+  transition: opacity 600ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 900ms;
+}
+.th-pill::before {           /* >= 44 px tap target round a ~30 px pill */
+  content: "";
+  position: absolute;
+  inset: -9px -6px;
+  border-radius: 999px;
+}
+.th-pill::after {            /* a slow gold breath round the rim */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 calc(28 * var(--u)) rgba(240, 200, 120, 0.7);
+  opacity: 0;
+}
+.th-pill.is-on {
+  pointer-events: auto;
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition: opacity 600ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0s;
+  animation: th-float 2.8s ease-in-out 0.9s infinite;
+}
+.th-pill.is-on::after { animation: th-breath 2.8s ease-in-out 0.9s infinite; }
+.th-pill:active { scale: 0.96; }
+.th-pill:focus-visible { outline: 2px solid #ab7c15; outline-offset: 4px; }
+.th-pill__t { position: relative; }
+
+/* the tap gesture in miniature: a resting ring, two rings breaking outward, a beating core */
+.th-tap, .th-ring {
+  position: relative;
+  flex: none;
+  width: calc(50 * var(--u));
+  height: calc(50 * var(--u));
+  color: #b8862b;
+}
+.th-tap::before {
+  content: "";
+  position: absolute;
+  inset: 16%;
+  border: calc(3 * var(--u)) solid currentColor;
+  border-radius: 50%;
+  opacity: 0.45;
+}
+.th-tap > span, .th-ring > span {
+  position: absolute;
+  inset: 0;
+  border: calc(3.5 * var(--u)) solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+  animation: th-ring-out 2.2s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+}
+.th-tap > span + span, .th-ring > span + span { animation-delay: 300ms; }
+.th-tap > i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34%;
+  height: 34%;
+  margin: -17% 0 0 -17%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, #fffdf7 0%, #f6e3b8 52%, rgba(184, 134, 43, 0.85) 100%);
+  box-shadow: 0 0 calc(8 * var(--u)) rgba(214, 160, 70, 0.7);
+  animation: th-core-beat 2.2s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+}
+
+/* the soft ring on the real tap target (Shivling basin, river, fountain) */
+.th-ring {
+  position: absolute;
+  z-index: 69;
+  width: auto;
+  height: auto;
+  color: rgba(246, 214, 140, 0.98);          /* warm gold: reads on white water and dusk sky */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+.th-ring.is-on { opacity: 1; }
+.th-ring > span {
+  border-width: calc(4 * var(--u));
+  box-shadow: 0 0 calc(10 * var(--u)) rgba(120, 80, 30, 0.5), inset 0 0 calc(10 * var(--u)) rgba(120, 80, 30, 0.35);
+  animation-duration: 2.8s;
+}
+.th-ring:not(.is-on) > *, .th-pill:not(.is-on) .th-tap > *,
+.th-away .th-pill, .th-away .th-pill::after, .th-away .th-tap > *, .th-away .th-ring > * { animation-play-state: paused; }
+
+@keyframes th-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(-7 * var(--u))); } }
+@keyframes th-breath { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.9; } }
+@keyframes th-ring-out {
+  0% { opacity: 0; transform: scale(0.3); }
+  6% { opacity: 1; }
+  32%, 100% { opacity: 0; transform: scale(1.16); }
+}
+@keyframes th-core-beat {
+  0% { transform: scale(1); }
+  4% { transform: scale(1.26); }
+  11% { transform: scale(1); }
+  18% { transform: scale(1.22); }
+  26%, 100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .th-pill, .th-ring { display: none; }
+}

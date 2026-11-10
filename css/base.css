@@ -1,0 +1,18 @@
+/* base.css -- page shell. The invite is a single column of PSD stages; on a phone
+   the column is the screen width, on wider screens one stage is one screen tall
+   (a centred phone-width column). */
+:root {
+  --page: #1f2a33;
+  --col: min(100vw, calc(100svh * 1080 / 1920));
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--page); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html.is-locked, html.is-locked body { overflow: hidden; overscroll-behavior: none; }
+body { margin: 0; min-height: 100svh; background: var(--page); -webkit-font-smoothing: antialiased; }
+img { display: block; }
+.invite { width: var(--col); margin: 0 auto; overflow-x: clip; }
+.scene { position: relative; }
+:focus-visible { outline: 2px solid #c25a7a; outline-offset: 3px; }
+/* intro.js focuses the column (tabindex -1) for screen readers when the gate
+   opens; a ring around every slide is noise. Links/buttons keep their focus ring. */
+.invite:focus, .invite:focus-visible { outline: none; }
