@@ -1,4 +1,4 @@
-// interactive-features.js -- Innovative interactive enhancements for Vansh & Ishika invite
+// interactive-features.js -- $10k Luxury Level interactive enhancements for Vansh & Ishika invite
 
 document.addEventListener("DOMContentLoaded", () => {
   initDock();
@@ -8,20 +8,52 @@ document.addEventListener("DOMContentLoaded", () => {
   initFireworks();
 });
 
+// -------------------------------------------------- Luxury Temple Chime Synth
+function playTempleChime() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    if (ctx.state === "suspended") ctx.resume();
+
+    // Fundamental Bell Sine
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = "sine";
+    osc1.frequency.setValueAtTime(1046.5, ctx.currentTime); // C6
+    gain1.gain.setValueAtTime(0.18, ctx.currentTime);
+    gain1.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.5);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start();
+    osc1.stop(ctx.currentTime + 1.5);
+
+    // Harmonic Overtone
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(1567.98, ctx.currentTime); // G6
+    gain2.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain2.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.0);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start();
+    osc2.stop(ctx.currentTime + 1.0);
+  } catch (e) {}
+}
+
 // -------------------------------------------------- 1. Royal Floating Quick Dock
 function initDock() {
   const dock = document.getElementById("royalDock");
   if (!dock) return;
 
-  // Reveal dock once the user unlocks the gate
   const checkGate = setInterval(() => {
     if (!document.documentElement.classList.contains("is-locked") || !document.querySelector("[data-intro]")) {
       dock.classList.add("is-visible");
       clearInterval(checkGate);
     }
-  }, 500);
+  }, 400);
 
-  // Quick navigation smooth scrolls
   const btnBless = document.getElementById("dockBless");
   const btnVenues = document.getElementById("dockVenues");
   const btnCal = document.getElementById("dockCalendar");
@@ -47,7 +79,8 @@ function initDock() {
 
   if (btnShower) {
     btnShower.addEventListener("click", () => {
-      triggerPetalShower();
+      playTempleChime();
+      triggerPetalShower(18);
     });
   }
 }
@@ -56,12 +89,13 @@ function initDock() {
 function initDiyaPond() {
   const pond = document.getElementById("diyaPond");
   const countBadge = document.getElementById("diyaCount");
+  const btnCta = document.getElementById("btnLightDiya");
   if (!pond || !countBadge) return;
 
   let count = parseInt(localStorage.getItem("vi_diya_count") || "618", 10);
   countBadge.textContent = count.toLocaleString();
 
-  function addDiya(x, y) {
+  function spawnDiya(x, y, playSound = true) {
     const diya = document.createElement("div");
     diya.className = "floating-diya";
     diya.style.left = `${x}px`;
@@ -79,27 +113,48 @@ function initDiyaPond() {
     localStorage.setItem("vi_diya_count", count.toString());
     countBadge.textContent = count.toLocaleString();
 
-    // Trigger subtle golden burst
-    triggerPetalShower(5);
+    if (playSound) {
+      playTempleChime();
+      triggerPetalShower(6);
+    }
   }
 
-  // Pre-place a few gentle diyas
+  // Pre-seed gentle floating diyas
   setTimeout(() => {
     const rect = pond.getBoundingClientRect();
-    if (rect.width > 0) {
-      addDiya(rect.width * 0.28, 140);
-      addDiya(rect.width * 0.52, 110);
-      addDiya(rect.width * 0.74, 150);
-    }
-  }, 400);
+    const w = rect.width || 340;
+    spawnDiya(w * 0.25, 140, false);
+    spawnDiya(w * 0.52, 110, false);
+    spawnDiya(w * 0.78, 150, false);
+  }, 300);
 
-  // Place on click/tap
-  pond.addEventListener("pointerdown", (e) => {
+  // Direct CTA Button
+  if (btnCta) {
+    btnCta.addEventListener("click", (e) => {
+      e.preventDefault();
+      const rect = pond.getBoundingClientRect();
+      const rx = 40 + Math.random() * (rect.width - 80);
+      const ry = 70 + Math.random() * (rect.height - 110);
+      spawnDiya(rx, ry, true);
+    });
+  }
+
+  // Tap anywhere on water
+  const handlePondTap = (e) => {
     const rect = pond.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = Math.max(50, Math.min(rect.height - 35, e.clientY - rect.top));
-    addDiya(x, y);
-  });
+    const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : null);
+    const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : null);
+    if (clientX === null || clientY === null) return;
+
+    const x = Math.max(25, Math.min(rect.width - 25, clientX - rect.left));
+    const y = Math.max(50, Math.min(rect.height - 35, clientY - rect.top));
+    spawnDiya(x, y, true);
+  };
+
+  pond.addEventListener("click", handlePondTap);
+  pond.addEventListener("touchstart", (e) => {
+    handlePondTap(e);
+  }, { passive: true });
 }
 
 // -------------------------------------------------- 3. Sacred Wishes Wall
@@ -110,9 +165,9 @@ function initWishes() {
   const tags = document.querySelectorAll(".blessing-tag");
 
   const defaultWishes = [
-    { text: "May your sacred union be blessed with love that grows deeper with every sunrise.", author: "Shagun & Family" },
+    { text: "May your sacred union be blessed with love that grows deeper with every sunrise.", author: "Loved Ones" },
     { text: "Wishing Vansh & Ishika an eternity of laughter, health, and royal togetherness!", author: "Khandelwal Elders" },
-    { text: "Sada Sukhi Raho! Can't wait to dance at the Sangeet & Haldi celebrations in Agra!", author: "Loved Ones" }
+    { text: "Sada Sukhi Raho! Can't wait to dance at the Sangeet & Haldi celebrations in Agra!", author: "Friends & Family" }
   ];
 
   let savedWishes = [];
@@ -147,7 +202,8 @@ function initWishes() {
       localStorage.setItem("vi_guest_wishes", JSON.stringify(savedWishes));
     } catch (e) {}
     renderWishes();
-    triggerPetalShower(10);
+    playTempleChime();
+    triggerPetalShower(14);
   }
 
   if (form && input) {
@@ -173,9 +229,8 @@ function initCalendar() {
   const btnIcal = document.getElementById("btnCalIcal");
 
   const title = encodeURIComponent("Vansh & Ishika Wedding Celebrations");
-  const desc = encodeURIComponent("Join us to celebrate the wedding ceremonies of Vansh & Ishika in Agra.\n\nEvents:\n- Mehendi & Tilak: 20th November (DoubleTree by Hilton)\n- Haldi Carnival & Wedding Ceremony: 21st November (Raj Devam)");
+  const desc = encodeURIComponent("Join us to celebrate the royal wedding ceremonies of Vansh & Ishika in Agra.\n\nEvents:\n- Mehendi & Tilak: 20th November (DoubleTree by Hilton)\n- Haldi Carnival & Wedding Ceremony: 21st November (Raj Devam)");
   const loc = encodeURIComponent("Agra, Uttar Pradesh, India");
-  // 2026-11-20T04:30:00Z to 2026-11-21T18:30:00Z
   const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=20261120T043000Z/20261121T183000Z&details=${desc}&location=${loc}`;
 
   if (btnGoogle) {
@@ -228,14 +283,14 @@ function triggerPetalShower(count = 12) {
   for (let i = 0; i < count; i++) {
     const p = document.createElement("div");
     const size = 12 + Math.random() * 16;
-    const startX = window.innerWidth * (0.2 + Math.random() * 0.6);
+    const startX = window.innerWidth * (0.15 + Math.random() * 0.7);
     const endX = startX + (Math.random() - 0.5) * 200;
-    const fallDist = 300 + Math.random() * 350;
+    const fallDist = 320 + Math.random() * 380;
     const rot = Math.random() * 360;
 
     p.style.position = "absolute";
     p.style.left = `${startX}px`;
-    p.style.top = `${window.innerHeight * 0.4}px`;
+    p.style.top = `${window.innerHeight * 0.35}px`;
     p.style.width = `${size}px`;
     p.style.height = `${size * 1.3}px`;
     p.style.borderRadius = "50% 0 50% 50%";
@@ -290,7 +345,7 @@ function initFireworks() {
     update() {
       this.x += this.vx;
       this.y += this.vy;
-      this.vy += 0.08; // gravity
+      this.vy += 0.08;
       this.alpha -= this.decay;
     }
     draw(ctx) {
@@ -329,6 +384,7 @@ function initFireworks() {
   }
 
   btn.addEventListener("click", () => {
+    playTempleChime();
     resize();
     const w = canvas.width, h = canvas.height;
     launchRocket(w * 0.3, h * 0.35);
@@ -337,7 +393,7 @@ function initFireworks() {
     setTimeout(() => launchRocket(w * 0.25, h * 0.25), 700);
     setTimeout(() => launchRocket(w * 0.75, h * 0.3), 900);
 
-    triggerPetalShower(20);
+    triggerPetalShower(24);
 
     if (!animId) {
       animId = requestAnimationFrame(loop);

@@ -544,3 +544,32 @@
 .celebrate-btn:active {
   transform: scale(0.98);
 }
+
+/* Light Diya CTA Button */
+.light-diya-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #dfb260 0%, #b87a28 50%, #dfb260 100%);
+  color: #2b0f13;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  border-radius: 999px;
+  border: 1px solid #ffe8aa;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(223, 178, 96, 0.45);
+  margin-bottom: 18px;
+  transition: all 0.25s ease;
+}
+.light-diya-cta:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 26px rgba(223, 178, 96, 0.65);
+}
+.light-diya-cta:active {
+  transform: scale(0.97);
+}

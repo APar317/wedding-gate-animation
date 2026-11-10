@@ -36,7 +36,7 @@ const STARS = [
   [72, 312], [1012, 420], [46, 610], [1030, 700], [86, 880],
 ];
 const RIVER_TOP = 1190;          // taps below this line set a diya on the water
-const MAX_DIYAS = 6;
+const MAX_DIYAS = 24;
 
 export function init() {
   if (reduced) return;
@@ -77,7 +77,10 @@ function countdown() {
 
   const live_ = new Set();
   const float = (x, y) => {
-    if (live_.size >= MAX_DIYAS) return;
+    if (live_.size >= MAX_DIYAS) {
+      const first = live_.values().next().value;
+      if (first) { live_.delete(first); first.remove(); }
+    }
     const u = unit(stage);
     const wrap = document.createElement("span");
     wrap.className = "cl-diya";

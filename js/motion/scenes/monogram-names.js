@@ -739,7 +739,7 @@ function makeShrineButton(s) {
 // Every flame flares (throttled); true when it fired.
 function lightDiyas(s) {
   const now = performance.now();
-  if (now - (s.lastShrine || 0) < 700 || !s.scene.classList.contains("is-entered") || !s.ex.flames) return false;
+  if (now - (s.lastShrine || 0) < 300) return false;
   s.lastShrine = now;
   shrineTap(s);
   return true;
