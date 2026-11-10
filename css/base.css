@@ -16,3 +16,12 @@ img { display: block; }
 /* intro.js focuses the column (tabindex -1) for screen readers when the gate
    opens; a ring around every slide is noise. Links/buttons keep their focus ring. */
 .invite:focus, .invite:focus-visible { outline: none; }
+
+/* Safety for 10k luxury presentation: prevent any browser default broken image borders */
+img {
+  border: 0;
+  outline: none;
+}
+img:-moz-loading {
+  visibility: hidden;
+}
