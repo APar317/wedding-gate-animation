@@ -2,7 +2,7 @@
    the column is the screen width, on wider screens one stage is one screen tall
    (a centred phone-width column). */
 :root {
-  --page: #1f2a33;
+  --page: #0d1527;
   --col: min(100vw, calc(100svh * 1080 / 1920));
 }
 *, *::before, *::after { box-sizing: border-box; }

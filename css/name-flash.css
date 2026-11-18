@@ -1,0 +1,208 @@
+/* name-flash.css -- Cinematic Name Flash after gate opens before guest app shows */
+
+.name-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #1b2744 0%, #10192f 55%, #080d19 100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  color: #f7ecd9;
+}
+
+.name-flash.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.name-flash.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 900ms cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+/* Background mandala ornament */
+.nf-bg-mandala {
+  position: absolute;
+  width: min(85vw, 420px);
+  height: min(85vw, 420px);
+  border-radius: 50%;
+  border: 1.5px dashed rgba(201, 162, 74, 0.45);
+  box-shadow: 0 0 60px rgba(201, 162, 74, 0.2), inset 0 0 40px rgba(201, 162, 74, 0.15);
+  animation: nf-spin 40s linear infinite;
+  pointer-events: none;
+}
+
+.nf-bg-mandala::after {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 162, 74, 0.35);
+}
+
+@keyframes nf-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Content Container */
+.nf-content {
+  position: relative;
+  z-index: 2;
+  width: min(90vw, 420px);
+  padding: 36px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: nf-rise 1200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes nf-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Top Ganesha Shloka */
+.nf-shloka-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.nf-ganesha-icon {
+  width: 44px;
+  height: 44px;
+  color: #efd49c;
+  filter: drop-shadow(0 2px 10px rgba(239, 212, 156, 0.45));
+}
+
+.nf-shloka {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #efd49c;
+  text-transform: uppercase;
+}
+
+.nf-invite-line {
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(255, 250, 240, 0.85);
+  margin-bottom: 14px;
+}
+
+/* Grand Couple Names */
+.nf-couple {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 16px;
+}
+
+.nf-name {
+  font-family: "Maginia", "Cormorant Garamond", serif;
+  font-size: clamp(52px, 14vw, 70px);
+  line-height: 1.05;
+  color: #ffffff;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 25px rgba(239, 212, 156, 0.65), 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+.nf-amp {
+  font-family: "Hello Bride", cursive;
+  font-size: clamp(38px, 10vw, 50px);
+  line-height: 0.9;
+  color: #e27086;
+  margin: -4px 0;
+}
+
+/* Golden Rule with center diamond */
+.nf-rule {
+  position: relative;
+  width: 140px;
+  height: 1.5px;
+  margin: 14px auto 18px;
+  background: linear-gradient(90deg, rgba(201, 162, 74, 0), rgba(201, 162, 74, 0.95) 30%, rgba(201, 162, 74, 0.95) 70%, rgba(201, 162, 74, 0));
+}
+
+.nf-rule::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  background: #c9a24a;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* Ceremony & Date details */
+.nf-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.nf-event {
+  font-family: "Hello Bride", cursive;
+  font-size: 38px;
+  line-height: 1.1;
+  color: #efd49c;
+  margin-bottom: 4px;
+  text-shadow: 0 2px 10px rgba(239, 212, 156, 0.35);
+}
+
+.nf-date {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.nf-city {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #efd49c;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Sparkling particles */
+.nf-sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff, #efd49c 70%, transparent);
+  pointer-events: none;
+  animation: nf-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes nf-glow {
+  0% { opacity: 0.2; transform: scale(0.7); }
+  100% { opacity: 1; transform: scale(1.3); }
+}
